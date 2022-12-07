@@ -1,6 +1,8 @@
 {% extends 'app/base.html' %}
-{% block content %}
+{% block header %}
 {% if user.is_authenticated %}
-    <p>Vous êtes connecté en tant que {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
+<a class="logout" href="{% url 'logout' %}">Se déconnecter</a>
 {% endif %}
+{% endblock %}
+{% block content %}
 {% endblock %}
