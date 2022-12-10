@@ -25,7 +25,7 @@ class LoginPageView(View):
             if user is not None:
                 login(request, user)
                 return redirect('home')
-        message = 'Identifiants invalides.'
+        message = 'Identifiant ou mot de passe invalide.'
         return render(request, self.template_name, context={'form': form, 'message': message})
 
 
@@ -47,4 +47,6 @@ def logout_user(request):
 
 @login_required
 def home(request):
-    return render(request, 'app/home.html')
+    return render(request, 'app/flux.html')
+
+

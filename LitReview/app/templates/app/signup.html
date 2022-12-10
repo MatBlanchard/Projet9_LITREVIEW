@@ -6,10 +6,10 @@
     <form class="container left" method="post">
         {{ form.as_p }}
         {% csrf_token %}
-        <button type="submit" >S’inscrire</button>
+        <button class="button" type="submit" >S’inscrire</button>
     </form>
     <div class="container right">
-        <p>Deja inscrit?</p>
-        <a href="{% url 'login' %}">Se connecter</a>
+        <h2>Deja inscrit?</h2>
+        <a class="button" href="{% url 'login' %}">Se connecter</a>
     </div>
 {% endblock content %}
