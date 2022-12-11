@@ -4,8 +4,8 @@ from app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', views.LoginPageView.as_view(), name='login'),
+    path('', views.LoginPageView.as_view(), name='login'),
     path('logout/', views.logout_user, name='logout'),
     path('signup/', views.signup_page, name='signup'),
-    path('home/', views.home, name='home'),
+    path('flux/', views.flux, name='flux'),
 ]

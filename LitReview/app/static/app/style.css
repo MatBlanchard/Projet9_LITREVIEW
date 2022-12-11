@@ -25,25 +25,50 @@ label {
 
 /*---------------------- Styles du header ------------------------*/
 .logo {
-   height: 95%;
+    position: relative;
+    float: left;
+    height: 95%;
+    cursor: pointer;
 }
 
 .title {
-    position: absolute;
-    left: 46%;
+    position: relative;
+    float: left;
+    display: flex;
+    left: 36%;
     top: -10px;
+    cursor: pointer;
+}
+
+.icon {
+    position: relative;
+    float: right;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+    padding-top: 19px;
+    padding-bottom: 19px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border: solid;
+    border-left-color: rgb(50,50,50);
+    border-bottom-color: rgb(75,75,75);
+    border-right-color: rgb(100,100,100);
+    border-top-color: rgb(125,125,125);
+}
+
+.icon:hover {
+    transform: scale(0.95);
 }
 
 .logout {
-    position: absolute;
-    right: 1%;
-    top: 24px;
-    text-decoration: none;
-    color: black;
+    right: 0px;
 }
 
-.logout:hover {
-    color: rgb(30,30,30);
+.subscribe {
+    right: 0px;
 }
 /*----------------------------------------------------------------*/
 
@@ -100,6 +125,3 @@ button.button {
     color: rgb(150,0,0);
 }
 
-.helptext {
-    visibility: hidden;
-}

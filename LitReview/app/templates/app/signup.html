@@ -4,6 +4,7 @@
         {{ form.errors }}
     {% endif %}
     <form class="container left" method="post">
+        <h2>Inscription</h2>
         {{ form.as_p }}
         {% csrf_token %}
         <button class="button" type="submit" >S’inscrire</button>

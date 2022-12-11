@@ -4,6 +4,11 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class SignupForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super(SignupForm, self).__init__(*args, **kwargs)
+        for field in ['username', 'password1', 'password2']:
+            self.fields[field].help_text = None
+
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
 
