@@ -9,7 +9,9 @@
 </head>
 <body>
     <header>
-        <img src="{% static 'app/img/logo.png' %}" class="logo" alt="Logo LitReview" onclick="location.href= '{% url 'flux' %}'">
+        <div>
+            <img src="{% static 'app/img/logo.png' %}" class="logo" alt="Logo LitReview" onclick="location.href= '{% url 'flux' %}'">
+        </div>
         <h1 class="title" onclick="location.href= '{% url 'flux' %}'">LitReview</h1>
         {% block header %}{% endblock %}
     </header>

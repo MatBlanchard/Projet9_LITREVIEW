@@ -23,6 +23,15 @@ label {
 	display: block;
 }
 
+table, tr{
+    width: 100%;
+}
+
+table, tr, td {
+    display: flex;
+    height: 100%;
+}
+
 /*---------------------- Styles du header ------------------------*/
 .logo {
     position: relative;
@@ -33,11 +42,12 @@ label {
 
 .title {
     position: relative;
-    float: left;
-    display: flex;
-    left: 36%;
+    flex-basis: fill;
     top: -10px;
     cursor: pointer;
+    background-color: white;
+    display: flex;
+    flex: auto;
 }
 
 .icon {
@@ -50,9 +60,10 @@ label {
     color: black;
     padding-top: 19px;
     padding-bottom: 19px;
-    padding-left: 2px;
-    padding-right: 2px;
+    padding-left: 6px;
+    padding-right: 6px;
     border: solid;
+    border-radius: 10px;
     border-left-color: rgb(50,50,50);
     border-bottom-color: rgb(75,75,75);
     border-right-color: rgb(100,100,100);
@@ -61,14 +72,6 @@ label {
 
 .icon:hover {
     transform: scale(0.95);
-}
-
-.logout {
-    right: 0px;
-}
-
-.subscribe {
-    right: 0px;
 }
 /*----------------------------------------------------------------*/
 
