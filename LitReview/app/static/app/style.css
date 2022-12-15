@@ -41,13 +41,10 @@ table, tr, td {
 }
 
 .title {
-    position: relative;
-    flex-basis: fill;
+    position: absolute;
+    left : 46%;
     top: -10px;
     cursor: pointer;
-    background-color: white;
-    display: flex;
-    flex: auto;
 }
 
 .icon {

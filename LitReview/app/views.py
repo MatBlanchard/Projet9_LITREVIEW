@@ -50,3 +50,15 @@ def flux(request):
     return render(request, 'app/flux.html')
 
 
+@login_required
+def posts(request):
+    return render(request, 'app/posts.html')
+
+
+@login_required
+def subscriptions(request):
+    return render(request, 'app/subscriptions.html')
+
+
+
+

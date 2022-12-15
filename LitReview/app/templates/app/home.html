@@ -2,9 +2,9 @@
 {% block header %}
 {% if user.is_authenticated %}
 <a class="icon" href="{% url 'logout' %}">Se déconnecter</a>
-<a class="icon" href="{% url 'logout' %}">Abonnements</a>
-<a class="icon" href="{% url 'logout' %}">Posts</a>
-<a class="icon" href="{% url 'logout' %}">Flux</a>
+<a class="icon" href="{% url 'subscriptions' %}">Abonnements</a>
+<a class="icon" href="{% url 'posts' %}">Posts</a>
+<a class="icon" href="{% url 'flux' %}">Flux</a>
 {% endif %}
 {% endblock %}
 {% block content %}
