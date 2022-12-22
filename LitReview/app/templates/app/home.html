@@ -1,11 +1,11 @@
 {% extends 'app/base.html' %}
 {% block header %}
-{% if user.is_authenticated %}
-<a class="icon" href="{% url 'logout' %}">Se déconnecter</a>
-<a class="icon" href="{% url 'subscriptions' %}">Abonnements</a>
-<a class="icon" href="{% url 'posts' %}">Posts</a>
-<a class="icon" href="{% url 'flux' %}">Flux</a>
-{% endif %}
+    {% if user.is_authenticated %}
+        <a class="icon" href="{% url 'logout' %}">Se déconnecter</a>
+        <a class="icon" href="{% url 'subscriptions' %}">Abonnements</a>
+        <a class="icon" href="{% url 'posts' %}">Posts</a>
+        <a class="icon" href="{% url 'flux' %}">Flux</a>
+    {% endif %}
 {% endblock %}
 {% block content %}
 {% endblock %}

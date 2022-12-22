@@ -1,5 +1,17 @@
 {% extends 'app/home.html' %}
 {% block content %}
-<button>Demander une critique</button>
-<button>Créer une critique</button>
+    <button class="button ticket left" onclick="location.href= '{% url 'ticket' %}'" >Demander une critique</button>
+    <button class="button ticket right" >Créer une critique</button>
+    {% for ticket in tickets %}
+        <div id="ticket" class="container center">
+            <img src="{{ ticket.image.url }}">
+            <div class="content cc">
+                <p>{{ ticket.user.username|add:" a demandé une critique"}}</p>
+                <p class="date">{{ ticket.time_created}}</p>
+                <h3>{{ ticket.title }}</h3>
+                <p>{{ ticket.description }}</p>
+                <button class="button wide bottom" >Créer une critique</button>
+            </div>
+        </div>
+     {% endfor %}
 {% endblock %}

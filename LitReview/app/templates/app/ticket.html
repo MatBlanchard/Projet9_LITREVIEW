@@ -1,0 +1,9 @@
+{% extends 'app/home.html' %}
+{% block content %}
+    <form class="container center cc" method="post" enctype="multipart/form-data">
+        <h2>Demander une critique</h2>
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button class="button" type="submit" >Envoyer</button>
+    </form>
+{% endblock %}

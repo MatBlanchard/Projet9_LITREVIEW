@@ -1,0 +1,38 @@
+.logo {
+    position: relative;
+    float: left;
+    height: 95%;
+    cursor: pointer;
+}
+
+.title {
+    position: absolute;
+    left : calc(59% - 236px);
+    top: calc(-4% + 12px);
+    cursor: pointer;
+    font-size: calc(1.2vw + 22px);
+}
+
+.icon {
+    position: relative;
+    float: right;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    padding-left: 6px;
+    padding-right: 6px;
+    border: solid;
+    border-width: 4px;
+    border-left-color: rgb(50,50,50);
+    border-bottom-color: rgb(75,75,75);
+    border-right-color: rgb(100,100,100);
+    border-top-color: rgb(125,125,125);
+}
+
+.icon:hover {
+    transform: scale(0.95);
+}

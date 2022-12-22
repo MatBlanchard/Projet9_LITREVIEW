@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.conf import settings
-from . import forms
+from . import forms, models
 
 
 class LoginPageView(View):
@@ -47,7 +47,8 @@ def logout_user(request):
 
 @login_required
 def flux(request):
-    return render(request, 'app/flux.html')
+    tickets = models.Ticket.objects.all()
+    return render(request, 'app/flux.html', context={'tickets': tickets})
 
 
 @login_required
@@ -58,6 +59,36 @@ def posts(request):
 @login_required
 def subscriptions(request):
     return render(request, 'app/subscriptions.html')
+
+
+@login_required
+def ticket_form(request):
+    form = forms.TicketForm()
+    if request.method == 'POST':
+        form = forms.TicketForm(request.POST, request.FILES)
+        if form.is_valid():
+            ticket = form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
+            return redirect('flux')
+    return render(request, 'app/ticket.html', context={'form': form})
+
+
+@login_required
+def subscriptions(request):
+    form = forms.FollowForm()
+    if request.method == 'POST':
+        form = forms.FollowForm(request.POST)
+        if form.is_valid():
+            user_follows = form.save(commit=False)
+            user_follows.user = request.user
+            user_follows.save()
+            return redirect('subscriptions')
+    context = {'form': form,
+               'followers': models.UserFollows.objects.filter(followed_user=request.user),
+               'followed': models.UserFollows.objects.filter(user=request.user)
+               }
+    return render(request, 'app/subscriptions.html', context=context)
 
 
 

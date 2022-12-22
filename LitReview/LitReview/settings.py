@@ -124,5 +124,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'login'
-
 LOGIN_REDIRECT_URL = 'flux'
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = 'media/'

@@ -1,3 +1,21 @@
 {% extends 'app/home.html' %}
 {% block content %}
+    <form class="container center cc" method="post">
+        <h2>Suivre d'autres utilisateurs</h2>
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button class="button" type="submit" >Envoyer</button>
+    </form>
+    <div class="container center cc">
+        <h2>Abonnement</h2>
+        {% for follows in followed %}
+            <p>{{ follows.followed_user.username}}</p>
+        {% endfor %}
+    </div>
+    <div class="container center cc">
+        <h2>Abonnés</h2>
+        {% for follower in followers %}
+            <p>{{ follower.user.username}}</p>
+        {% endfor %}
+    </div>
 {% endblock %}
