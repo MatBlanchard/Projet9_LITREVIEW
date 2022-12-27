@@ -3,7 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.conf import settings
+from django.db.models import CharField, Value
 from . import forms, models
+from itertools import chain
 
 
 class LoginPageView(View):
@@ -47,8 +49,21 @@ def logout_user(request):
 
 @login_required
 def flux(request):
-    tickets = models.Ticket.objects.all()
-    return render(request, 'app/flux.html', context={'tickets': tickets})
+    reviews = get_users_viewable_reviews(request.user)
+    # returns queryset of reviews
+    reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
+
+    tickets = get_users_viewable_tickets(request.user)
+    # returns queryset of tickets
+    tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
+
+    # combine and sort the two types of posts
+    posts = sorted(
+            chain(reviews, tickets),
+            key=lambda post: post.time_created,
+            reverse=True
+    )
+    return render(request, 'app/flux.html', context={'posts': posts})
 
 
 @login_required
@@ -75,6 +90,29 @@ def ticket_form(request):
 
 
 @login_required
+def review_form(request):
+    ticket_form = forms.TicketForm()
+    review_form = forms.ReviewForm()
+    if request.method == 'POST':
+        ticket_form = forms.TicketForm(request.POST, request.FILES)
+        review_form = forms.ReviewForm(request.POST)
+        if ticket_form.is_valid() and review_form.is_valid():
+            ticket = ticket_form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
+            review = review_form.save(commit=False)
+            review.ticket = ticket
+            review.user = request.user
+            review.save()
+            return redirect('flux')
+    context = {
+        'ticket_form': ticket_form,
+        'review_form': review_form
+    }
+    return render(request, 'app/review.html', context=context)
+
+
+@login_required
 def subscriptions(request):
     form = forms.FollowForm()
     if request.method == 'POST':
@@ -91,5 +129,9 @@ def subscriptions(request):
     return render(request, 'app/subscriptions.html', context=context)
 
 
+def get_users_viewable_tickets(user):
+    return models.Ticket.objects.filter(user=user)
 
 
+def get_users_viewable_reviews(user):
+    return models.Review.objects.filter(user=user)

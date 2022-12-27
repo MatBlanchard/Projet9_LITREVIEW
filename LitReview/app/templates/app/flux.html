@@ -1,17 +1,46 @@
 {% extends 'app/home.html' %}
 {% block content %}
     <button class="button ticket left" onclick="location.href= '{% url 'ticket' %}'" >Demander une critique</button>
-    <button class="button ticket right" >Créer une critique</button>
-    {% for ticket in tickets %}
-        <div id="ticket" class="container center">
-            <img src="{{ ticket.image.url }}">
-            <div class="content cc">
-                <p>{{ ticket.user.username|add:" a demandé une critique"}}</p>
-                <p class="date">{{ ticket.time_created}}</p>
-                <h3>{{ ticket.title }}</h3>
-                <p>{{ ticket.description }}</p>
-                <button class="button wide bottom" >Créer une critique</button>
+    <button class="button ticket right" onclick="location.href= '{% url 'review' %}'">Créer une critique</button>
+    {% for post in posts %}
+        {% if post.content_type == 'TICKET' %}
+            <div class="post container center">
+                <img src="{{ post.image.url }}">
+                <div class="content cc">
+                    <p>{{ post.user.username|add:" a demandé une critique"}}</p>
+                    <p class="date">{{ post.time_created}}</p>
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.description }}</p>
+                    <button class="button wide bottom">Créer une critique</button>
+                </div>
             </div>
-        </div>
-     {% endfor %}
+        {% elif post.content_type == 'REVIEW' %}
+            <div class="container center post">
+                <div class="sub_post">
+                    <p class="date inline right">{{ post.time_created}}</p>
+                    <p>{{ post.user.username|add:" a publié une critique"}}</p>
+                    <p class="inline">{{ post.headline|add:" - "}}</p>
+                    {% with ''|center:5 as range %}
+                        {% for i in range %}
+                            {% if post.rating < forloop.counter  %}
+                                <span class="fa fa-star checked"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                    <p class="right">{{ post.body}}</p>
+                </div>
+                <div class="sub_post">
+                    <img src="{{ post.ticket.image.url }}">
+                    <div class="content cc">
+                        <p>{{ post.user.username|add:" a demandé une critique"}}</p>
+                        <p class="date">{{ post.ticket.time_created}}</p>
+                        <h3>{{ post.ticket.title }}</h3>
+                        <p>{{ post.ticket.description }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
 {% endblock %}

@@ -13,6 +13,7 @@ urlpatterns = [
     path('posts/', views.posts, name='posts'),
     path('subscriptions/', views.subscriptions, name='subscriptions'),
     path('ticket/', views.ticket_form, name='ticket'),
+    path('review/', views.review_form, name='review'),
 ]
 
 if settings.DEBUG:

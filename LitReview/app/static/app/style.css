@@ -74,7 +74,7 @@ button.button {
 
 .ticket {
     position: absolute;
-    top: 80px;
+    top: 65px;
     width: calc(9% + 130px);
 }
 
@@ -90,9 +90,9 @@ button.button {
     display: inline-block;
     float: right;
     width: 69%;
-    height: 20vw;
     min-height: 265px;
     border: solid 1px;
+    background-color: rgb(180,180,180)
 }
 
 .date{
@@ -100,21 +100,45 @@ button.button {
     font-style: italic;
 }
 
-#id_description {
+.post {
+    margin-top: 50px;
+}
+
+.sub_post{
+    border: solid 1px;
+    padding: 5px;
+    margin: 20px;
+    background-color: rgb(180,180,180);
+}
+
+.sub_post>.content{
+    background-color: rgb(210,210,210);
+}
+
+.post>img,.sub_post>img {
+    display: inline-block;
+    max-width: 30%;
+    max-height: 300px;
+}
+
+#id_description,#id_body{
     width: 400px;
     max-width: 90%;
     height: 100px;
     padding: 0;
 }
 
-#ticket {
-    margin-top: 80px;
+#id_rating{
+    width: 50px;
 }
 
-#ticket>img {
-    padding-top: 25px;
-    display: inline-block;
-    max-width: 30%;
-    max-height: 400px;
+.checked{
+    color: white;
 }
+
+.inline{
+    display: inline-block;
+}
+
+
 
