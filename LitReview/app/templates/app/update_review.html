@@ -1,9 +1,10 @@
 {% extends 'app/home.html' %}
+{% load static %}
 {% block content %}
     <form class="container center cc" method="post" enctype="multipart/form-data">
         <h2>Vous modifiez votre critique en réponse à</h2>
         <div class="sub_post min_height">
-            {% if post.image.url is not None %}
+            {% if review.ticket.image.url is not None %}
                 <img src="{{ review.ticket.image.url }}" alt="{% static 'app/img/loading.gif' %}">
             {% endif %}
                 <div class="content cc">

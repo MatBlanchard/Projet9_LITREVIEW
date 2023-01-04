@@ -153,5 +153,10 @@ button.button {
     display: inline-block;
 }
 
+.body {
+    max-width: 46%;
+}
+
+
 
 
