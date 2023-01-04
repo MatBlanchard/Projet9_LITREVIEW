@@ -6,7 +6,9 @@
     </div>
     <form method="post" class="container right cc">
         <h2>Connexion</h2>
-        <h3 class="error">{{ message }}</h3>
+        {% if message != "" %}
+            <h3 class="error">{{ message }}</h3>
+        {% endif %}
         {{ form.as_p }}
         {% csrf_token %}
         <button class="button" type="submit" >Se connecter</button>

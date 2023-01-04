@@ -59,6 +59,7 @@ button.button {
 
 .button:hover {
     transform: scale(0.95);
+    cursor: pointer;
 }
 
 
@@ -72,18 +73,26 @@ button.button {
     color: rgb(150,0,0);
 }
 
-.ticket {
+.top {
     position: absolute;
     top: 65px;
     width: calc(9% + 130px);
 }
 
-.ticket.left {
+.top.left {
     left: calc(36vw - 180px);
 }
 
-.ticket.right {
+.top.right {
     left: calc(53vw + 35px);
+}
+
+.username {
+    position: absolute;
+    top: 64px;
+    padding: 7px;
+    left: calc(47.8vw - 34px);
+    width: calc(4.5% + 55px);
 }
 
 .content{
@@ -109,6 +118,10 @@ button.button {
     padding: 5px;
     margin: 20px;
     background-color: rgb(180,180,180);
+}
+
+.min_height {
+    min-height: 265px;
 }
 
 .sub_post>.content{

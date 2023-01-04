@@ -14,6 +14,12 @@ urlpatterns = [
     path('subscriptions/', views.subscriptions, name='subscriptions'),
     path('ticket/', views.ticket_form, name='ticket'),
     path('review/', views.review_form, name='review'),
+    path('unfollow/<int:follow_id>', views.unfollow, name='unfollow'),
+    path('review-existing_ticket/<int:ticket_id>', views.review_existing_ticket, name='review-existing_ticket'),
+    path('delete_ticket/<int:ticket_id>', views.delete_ticket, name='delete_ticket'),
+    path('update_ticket/<int:ticket_id>', views.update_ticket, name='update_ticket'),
+    path('delete_review/<int:review_id>', views.delete_review, name='delete_review'),
+    path('update_review/<int:review_id>', views.update_review, name='update_review'),
 ]
 
 if settings.DEBUG:

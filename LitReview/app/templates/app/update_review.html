@@ -1,0 +1,21 @@
+{% extends 'app/home.html' %}
+{% block content %}
+    <form class="container center cc" method="post" enctype="multipart/form-data">
+        <h2>Vous modifiez votre critique en réponse à</h2>
+        <div class="sub_post min_height">
+            {% if post.image.url is not None %}
+                <img src="{{ review.ticket.image.url }}" alt="{% static 'app/img/loading.gif' %}">
+            {% endif %}
+                <div class="content cc">
+                    <p>{{ review.ticket.user.username|add:" a demandé une critique"}}</p>
+                    <p class="date">{{ review.ticket.time_created}}</p>
+                    <h3>{{ review.ticket.title }}</h3>
+                    <p>{{ review.ticket.description }}</p>
+                </div>
+        </div>
+        <hr>
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button class="button" type="submit" >Envoyer</button>
+    </form>
+{% endblock %}

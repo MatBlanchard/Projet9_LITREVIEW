@@ -1,17 +1,22 @@
 {% extends 'app/home.html' %}
+{% load static %}
 {% block content %}
-    <button class="button ticket left" onclick="location.href= '{% url 'ticket' %}'" >Demander une critique</button>
-    <button class="button ticket right" onclick="location.href= '{% url 'review' %}'">Créer une critique</button>
+    <button class="button top left" onclick="location.href= '{% url 'ticket' %}'" >Demander une critique</button>
+    <button class="button top right" onclick="location.href= '{% url 'review' %}'">Créer une critique</button>
     {% for post in posts %}
         {% if post.content_type == 'TICKET' %}
             <div class="post container center">
-                <img src="{{ post.image.url }}">
+                {% if post.image.url is not None %}
+                    <img src="{{ post.image.url }}" alt="{% static 'app/img/loading.gif' %}">
+                {% endif %}
                 <div class="content cc">
                     <p>{{ post.user.username|add:" a demandé une critique"}}</p>
                     <p class="date">{{ post.time_created}}</p>
                     <h3>{{ post.title }}</h3>
                     <p>{{ post.description }}</p>
-                    <button class="button wide bottom">Créer une critique</button>
+                    <button class="button"
+                            onclick="location.href= '{% url 'review-existing_ticket' post.id %}'">
+                            Créer une critique</button>
                 </div>
             </div>
         {% elif post.content_type == 'REVIEW' %}
@@ -31,8 +36,10 @@
                     {% endwith %}
                     <p class="right">{{ post.body}}</p>
                 </div>
-                <div class="sub_post">
-                    <img src="{{ post.ticket.image.url }}">
+                <div class="sub_post min_height">
+                    {% if post.ticket.image.url is not None %}
+                        <img src="{{ post.ticket.image.url }}" alt="{% static 'app/img/loading.gif' %}">
+                    {% endif %}
                     <div class="content cc">
                         <p>{{ post.user.username|add:" a demandé une critique"}}</p>
                         <p class="date">{{ post.ticket.time_created}}</p>

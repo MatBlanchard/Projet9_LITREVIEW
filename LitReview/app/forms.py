@@ -32,6 +32,16 @@ class ReviewForm(forms.ModelForm):
 
 
 class FollowForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        # récupérer les utilisateurs courant et ceux qui sont déjà suivis
+        current_user = kwargs.pop('current_user')
+        follows = kwargs.pop('follows')
+
+        super().__init__(*args, **kwargs)
+
+        # filtrer la liste des utilisateurs pour exclure l'utilisateur courant et ceux qui sont déjà suivis
+        self.fields['followed_user'].queryset = get_user_model().objects.exclude(id__in=[current_user.id] + follows)
+
     class Meta:
         model = models.UserFollows
         fields = ['followed_user']

@@ -8,8 +8,11 @@
     </form>
     <div class="container center cc">
         <h2>Abonnement</h2>
-        {% for follows in followed %}
-            <p>{{ follows.followed_user.username}}</p>
+        {% for follow in follows %}
+            <div>
+                <p class="inline">{{ follow.followed_user.username}}</p>
+                <a class="button" href="{% url 'unfollow' follow.id %}" data-method="delete">Se désabonner</a>
+            </div>
         {% endfor %}
     </div>
     <div class="container center cc">

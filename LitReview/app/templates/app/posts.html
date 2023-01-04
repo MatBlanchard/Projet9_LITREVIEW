@@ -1,3 +1,58 @@
 {% extends 'app/home.html' %}
+{% load static %}
 {% block content %}
+    {% for post in posts %}
+        {% if post.content_type == 'TICKET' %}
+            <div class="post container center">
+                {% if post.image.url is not None %}
+                    <img src="{{ post.image.url }}" alt="{% static 'app/img/loading.gif' %}">
+                {% endif %}
+                <div class="content cc">
+                    <p>Vous avez demandé une critique</p>
+                    <p class="date">{{ post.time_created}}</p>
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.description }}</p>
+                    <button class="button"
+                            onclick="location.href= '{% url 'update_ticket' post.id %}'">
+                            Modifier</button>
+                    <button class="button"
+                            onclick="location.href= '{% url 'delete_ticket' post.id %}'">
+                            Supprimer</button>
+                </div>
+            </div>
+        {% elif post.content_type == 'REVIEW' %}
+            <div class="container center post">
+                <div class="sub_post">
+                    <p class="date inline right">{{ post.time_created}}</p>
+                    <p>Vous avez publié une critique</p>
+                    <p class="inline">{{ post.headline|add:" - "}}</p>
+                    {% with ''|center:5 as range %}
+                        {% for i in range %}
+                            {% if post.rating < forloop.counter  %}
+                                <span class="fa fa-star checked"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                    <p class="right">{{ post.body}}</p>
+                </div>
+                <div class="sub_post min_height">
+                    {% if post.ticket.image.url is not None %}
+                        <img src="{{ post.ticket.image.url }}" alt="{% static 'app/img/loading.gif' %}">
+                    {% endif %}
+                    <div class="content cc">
+                        <p>{{ post.user.username|add:" a demandé une critique"}}</p>
+                        <p class="date">{{ post.ticket.time_created}}</p>
+                        <h3>{{ post.ticket.title }}</h3>
+                        <p>{{ post.ticket.description }}</p>
+                        <a class="button" href="{% url 'update_review' post.id %}">Modifier</a>
+                        <button class="button"
+                            onclick="location.href= '{% url 'delete_review' post.id %}'">
+                            Supprimer</button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
 {% endblock %}

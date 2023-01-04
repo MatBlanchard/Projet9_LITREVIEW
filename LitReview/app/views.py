@@ -1,9 +1,9 @@
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.conf import settings
-from django.db.models import CharField, Value
+from django.db.models import CharField, Value, Q
 from . import forms, models
 from itertools import chain
 
@@ -50,30 +50,29 @@ def logout_user(request):
 @login_required
 def flux(request):
     reviews = get_users_viewable_reviews(request.user)
-    # returns queryset of reviews
     reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
-
     tickets = get_users_viewable_tickets(request.user)
-    # returns queryset of tickets
     tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
-
-    # combine and sort the two types of posts
     posts = sorted(
-            chain(reviews, tickets),
-            key=lambda post: post.time_created,
-            reverse=True
+        chain(reviews, tickets),
+        key=lambda post: post.time_created,
+        reverse=True
     )
     return render(request, 'app/flux.html', context={'posts': posts})
 
 
 @login_required
 def posts(request):
-    return render(request, 'app/posts.html')
-
-
-@login_required
-def subscriptions(request):
-    return render(request, 'app/subscriptions.html')
+    reviews = get_users_reviews(request.user)
+    reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
+    tickets = get_users_tickets(request.user)
+    tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
+    posts = sorted(
+        chain(reviews, tickets),
+        key=lambda post: post.time_created,
+        reverse=True
+    )
+    return render(request, 'app/posts.html', context={'posts': posts})
 
 
 @login_required
@@ -86,7 +85,10 @@ def ticket_form(request):
             ticket.user = request.user
             ticket.save()
             return redirect('flux')
-    return render(request, 'app/ticket.html', context={'form': form})
+    context = {'user': request.user,
+               'form': form
+               }
+    return render(request, 'app/ticket.html', context=context)
 
 
 @login_required
@@ -106,32 +108,119 @@ def review_form(request):
             review.save()
             return redirect('flux')
     context = {
-        'ticket_form': ticket_form,
-        'review_form': review_form
-    }
+               'ticket_form': ticket_form,
+               'review_form': review_form
+               }
     return render(request, 'app/review.html', context=context)
 
 
 @login_required
-def subscriptions(request):
-    form = forms.FollowForm()
+def review_existing_ticket(request, ticket_id):
+    form = forms.ReviewForm()
+    ticket = get_object_or_404(models.Ticket, pk=ticket_id)
     if request.method == 'POST':
-        form = forms.FollowForm(request.POST)
+        form = forms.ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.ticket = ticket
+            review.user = request.user
+            review.save()
+            return redirect('flux')
+    context = {
+               'ticket': ticket,
+               'form': form
+               }
+    return render(request, 'app/review_existing_ticket.html', context=context)
+
+
+@login_required
+def subscriptions(request):
+    form = forms.FollowForm(current_user=request.user,
+                            follows=list(models.UserFollows.objects.filter(user=request.user)
+                                         .values_list('followed_user_id', flat=True)))
+    if request.method == 'POST':
+        form = forms.FollowForm(request.POST, current_user=request.user,
+                                follows=list(models.UserFollows.objects.filter(user=request.user)
+                                             .values_list('followed_user_id', flat=True)))
         if form.is_valid():
             user_follows = form.save(commit=False)
             user_follows.user = request.user
             user_follows.save()
             return redirect('subscriptions')
-    context = {'form': form,
+    context = {
+               'form': form,
                'followers': models.UserFollows.objects.filter(followed_user=request.user),
-               'followed': models.UserFollows.objects.filter(user=request.user)
+               'follows': models.UserFollows.objects.filter(user=request.user)
                }
     return render(request, 'app/subscriptions.html', context=context)
 
 
+@login_required
+def unfollow(request, follow_id):
+    follow = get_object_or_404(models.UserFollows, pk=follow_id)
+    follow.delete()
+    return redirect('subscriptions')
+
+
+@login_required
+def delete_ticket(request, ticket_id):
+    ticket = get_object_or_404(models.Ticket, pk=ticket_id)
+    ticket.delete()
+    return redirect('posts')
+
+
+@login_required
+def update_ticket(request, ticket_id):
+    ticket = get_object_or_404(models.Ticket, pk=ticket_id)
+    if ticket.user != request.user:
+        return redirect('posts')
+    if request.method == 'POST':
+        form = forms.TicketForm(request.POST, request.FILES, instance=ticket)
+        if form.is_valid():
+            form.save()
+            return redirect('posts')
+    else:
+        form = forms.TicketForm(instance=ticket)
+    context = {'form': form, 'ticket': ticket}
+    return render(request, 'app/update_ticket.html', context=context)
+
+
+@login_required
+def delete_review(request, review_id):
+    review = get_object_or_404(models.Review, pk=review_id)
+    review.delete()
+    return redirect('posts')
+
+
+@login_required
+def update_review(request, review_id):
+    review = get_object_or_404(models.Review, pk=review_id)
+    if review.user != request.user:
+        return redirect('posts')
+    if request.method == 'POST':
+        form = forms.ReviewForm(request.POST, request.FILES, instance=review)
+        if form.is_valid():
+            form.save()
+            return redirect('posts')
+    else:
+        form = forms.ReviewForm(instance=review)
+    context = {'form': form, 'review': review}
+    return render(request, 'app/update_review.html', context=context)
+
+
 def get_users_viewable_tickets(user):
-    return models.Ticket.objects.filter(user=user)
+    followed_users = models.UserFollows.objects.filter(user=user).values_list('followed_user_id', flat=True)
+    return models.Ticket.objects.filter(Q(user=user) | Q(user__in=followed_users)).exclude(review__isnull=False)
+
+
+def get_users_tickets(user):
+    return models.Ticket.objects.filter(user=user).exclude(review__isnull=False)
 
 
 def get_users_viewable_reviews(user):
+    followed_users = models.UserFollows.objects.filter(user=user).values_list('followed_user_id', flat=True)
+    return models.Review.objects.filter(Q(user=user) | Q(user__in=followed_users))
+
+
+def get_users_reviews(user):
     return models.Review.objects.filter(user=user)

@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <title>LitReview</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{% static 'app/element.css' %}"/>
-    <link rel="stylesheet" href="{% static 'app/header.css' %}"/>
-    <link rel="stylesheet" href="{% static 'app/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'app/element.css' %}">
+    <link rel="stylesheet" href="{% static 'app/header.css' %}">
+    <link rel="stylesheet" href="{% static 'app/style.css' %}">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'app/img/favicon.ico' %}">
 </head>
 <body>
@@ -16,6 +16,9 @@
         <h1 class="title" onclick="location.href= '{% url 'flux' %}'">LitReview</h1>
         {% block header %}{% endblock %}
     </header>
+    {% if user.is_authenticated %}
+        <button class="button username" onclick="location.href= '{% url 'posts' %}'" >{{ user.username }}</button>
+    {% endif %}
     {% block content %}{% endblock %}
 </body>
 </html>
