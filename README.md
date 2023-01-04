@@ -33,3 +33,10 @@ py LitReview\manage.py runserver
 ```
 http://127.0.0.1:8000/
 ```
+## Générer le rapport flake8
+- Tapez la commande:
+```
+flake8 --format=html --htmldir=flake-report
+```
+- Vous devez, au préalable, avoir installé les packages
+- Le rapport sera généré dans le dossier flake-report
